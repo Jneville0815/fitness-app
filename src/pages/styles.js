@@ -7,6 +7,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
     },
+    tabs: {
+        flexGrow: 1,
+    },
     margin: {
         margin: theme.spacing(1),
     },
@@ -30,8 +33,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
     table: {
-        minWidth: 650,
-        maxWidth: 650,
+        width: 650,
         margin: '0 auto',
     },
     addContainer: {
