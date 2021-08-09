@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import clsx from 'clsx'
 
 import InputLabel from '@material-ui/core/InputLabel'
@@ -14,8 +14,10 @@ import TableRow from '@material-ui/core/TableRow'
 import DeleteIcon from '@material-ui/icons/Delete'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
 
 import useStyles from './styles'
+import { Context } from '../context/Store'
 import { food, user } from './fakeData'
 
 const Nutrition = () => {
@@ -23,15 +25,16 @@ const Nutrition = () => {
 
     const [currentFoods, setCurrentFoods] = useState([])
     const [foodSelectionIndex, setFoodSelectionIndex] = useState('')
-    const [userData, setUserData] = useState({
-        name: '',
-        protein: 0,
-        carbs: 0,
-        fat: 0,
-    })
-
+    const [userData, setUserData] = useState({})
+    const [inputValue, setInputValue] = useState('')
+    const [state, dispatch] = useContext(Context)
+    console.log(state)
     const handleChange = (event) => {
         setFoodSelectionIndex(event.target.value)
+    }
+
+    const handleInputChange = (event) => {
+        setInputValue(event.target.value)
     }
 
     useEffect(() => {
@@ -42,15 +45,22 @@ const Nutrition = () => {
         <div className={clsx(classes.root)}>
             <h1>Nutrition Page</h1>
             <p>
-                {userData.name}'s daily macros: (
-                {userData.protein * 4 + userData.carbs * 4 + userData.fat * 9}{' '}
+                {userData.name} still needs: (
+                {userData.targetProtein * 4 +
+                    userData.targetCarbs * 4 +
+                    userData.targetFat * 9 -
+                    (userData.currentProtein * 4 +
+                        userData.currentCarbs * 4 +
+                        userData.currentFat * 9)}{' '}
                 calories)
             </p>
 
             <div className={clsx(classes.macros)}>
-                <p>Fat: {userData.fat}</p>
-                <p>Carbs: {userData.carbs}</p>
-                <p>Protein: {userData.protein}</p>
+                <p>Fat: {userData.targetFat - userData.currentFat}</p>
+                <p>Carbs: {userData.targetCarbs - userData.currentCarbs}</p>
+                <p>
+                    Protein: {userData.targetProtein - userData.currentProtein}
+                </p>
             </div>
             <div className={classes.addContainer}>
                 <FormControl className={classes.formControl}>
@@ -82,14 +92,15 @@ const Nutrition = () => {
                             ])
                             setUserData({
                                 ...userData,
-                                protein:
-                                    userData.protein +
+                                currentProtein:
+                                    userData.currentProtein +
                                     food[foodSelectionIndex].protein,
-                                carbs:
-                                    userData.carbs +
+                                currentCarbs:
+                                    userData.currentCarbs +
                                     food[foodSelectionIndex].carbs,
-                                fat:
-                                    userData.fat + food[foodSelectionIndex].fat,
+                                currentFat:
+                                    userData.currentFat +
+                                    food[foodSelectionIndex].fat,
                             })
                         }
                     }}
@@ -147,14 +158,14 @@ const Nutrition = () => {
                                             onClick={() => {
                                                 setUserData({
                                                     ...userData,
-                                                    protein:
-                                                        userData.protein -
+                                                    currentProtein:
+                                                        userData.currentProtein -
                                                         currentFoods[i].protein,
-                                                    carbs:
-                                                        userData.carbs -
+                                                    currentCarbs:
+                                                        userData.currentCarbs -
                                                         currentFoods[i].carbs,
-                                                    fat:
-                                                        userData.fat -
+                                                    currentFat:
+                                                        userData.currentFat -
                                                         currentFoods[i].fat,
                                                 })
 
@@ -172,6 +183,16 @@ const Nutrition = () => {
                     </Table>
                 </TableContainer>
             )}
+            <TextField
+                id="outlined-multiline-static"
+                style={{ marginTop: 30, width: '30ch' }}
+                label="Additional Notes"
+                multiline
+                rows={4}
+                onChange={handleInputChange}
+                value={inputValue}
+                variant="outlined"
+            />
             {currentFoods.length > 0 && (
                 <Button
                     className={clsx(classes.marginTop)}

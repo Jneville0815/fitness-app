@@ -23,13 +23,94 @@ export const food = [
         carbs: 28,
         fat: 0,
     },
+    {
+        name: 'Small Guac Cup',
+        protein: 0,
+        carbs: 6,
+        fat: 8,
+    },
+    {
+        name: 'Publix Italian Sub',
+        protein: 58,
+        carbs: 101,
+        fat: 50,
+    },
+    {
+        name: 'Breakfast Protein Oatmeal',
+        protein: 21,
+        carbs: 44,
+        fat: 3.5,
+        info: '1 scoop of vegan protein, half a cup of blueberries, half a cup of dry oatmeal',
+    },
+    {
+        name: 'Yerba Mate',
+        protein: 0,
+        carbs: 25,
+        fat: 0,
+    },
+    {
+        name: 'Home Smoothie',
+        protein: 51,
+        carbs: 41,
+        fat: 3.5,
+        info: '1 scoop of vegan protein, 1 scoop of isopure protein, half a cup of frozen fruit (8 carbs), half a cup of dry oatmeal',
+    },
+    {
+        name: 'PB&J',
+        protein: 7,
+        carbs: 43,
+        fat: 15,
+        info: '2 tbsp of peanut butter, 1 tbsp jelly (strawberry squeeze non sugar free)',
+    },
+    {
+        name: 'Quick Beef and Rice',
+        protein: 43,
+        carbs: 75,
+        fat: 11,
+        info: 'Pack of whole grain medley and 2 servings of beef fajitas',
+    },
+    {
+        name: 'Isopure Protein',
+        protein: 25,
+        carbs: 0,
+        fat: 0,
+    },
+    {
+        name: 'Turkey/Rice Lunch',
+        protein: 29,
+        carbs: 64,
+        fat: 10,
+        info: '1lb of turkey, half a cup of cooked rice, 1 tbsp sauce, cup of veggies',
+    },
+    {
+        name: 'Half of a liquid IV',
+        protein: 0,
+        carbs: 12,
+        fat: 0,
+    },
+    {
+        name: 'Salmon Meal from Cheddars',
+        protein: 52,
+        carbs: 74,
+        fat: 43,
+        info: '8oz salmon, baked potato, caesar salad',
+    },
+    {
+        name: 'Chipotle Burrito',
+        protein: 93,
+        carbs: 126,
+        fat: 60.5,
+    },
 ]
 
 export const user = {
     name: 'Jimmy',
-    protein: 50,
-    carbs: 50,
-    fat: 20,
+    currentProtein: 0,
+    currentCarbs: 0,
+    currentFat: 0,
+    targetProtein: 265,
+    targetCarbs: 330,
+    targetFat: 80,
 }
 
 export const push = [

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import clsx from 'clsx'
 
 import FormControl from '@material-ui/core/FormControl'
@@ -10,14 +10,23 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import useStyles from './styles'
+import { useHistory } from 'react-router-dom'
+
+import backend from '../api/backend'
+import { Context } from '../context/Store'
 
 const Login = () => {
     const classes = useStyles()
-    const [values, setValues] = React.useState({
-        username: '',
+    const history = useHistory()
+
+    const [values, setValues] = useState({
+        email: '',
         password: '',
         showPassword: false,
     })
+    const [error, setError] = useState(false)
+    const [state, dispatch] = useContext(Context)
+
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value })
     }
@@ -30,18 +39,40 @@ const Login = () => {
         event.preventDefault()
     }
 
+    const authenticateUser = async () => {
+        let email = values.email
+        let password = values.password
+        try {
+            const response = await backend.post('/user/login', {
+                email,
+                password,
+            })
+            dispatch({ type: 'SET_TOKEN', payload: response.data })
+            dispatch({ type: 'SET_EMAIL', payload: email })
+            if (response.status === 200) {
+                setValues({ ...values, email: '', password: '' })
+                console.log('Login Success')
+                setError(false)
+                history.push('/home')
+            }
+        } catch (err) {
+            setError(true)
+            console.log('Login failed', err)
+        }
+    }
+
     return (
         <div className={clsx(classes.root)}>
             <h1>Login Page</h1>
             <FormControl className={clsx(classes.margin, classes.textField)}>
                 <InputLabel htmlFor="standard-adornment-username">
-                    Username
+                    Email
                 </InputLabel>
                 <Input
                     id="standard-adornment-username"
                     type={'text'}
-                    value={values.username}
-                    onChange={handleChange('username')}
+                    value={values.email}
+                    onChange={handleChange('email')}
                 />
             </FormControl>
             <FormControl className={clsx(classes.margin, classes.textField)}>
@@ -70,11 +101,19 @@ const Login = () => {
                     }
                 />
             </FormControl>
+            {error && (
+                <p style={{ color: 'red', marginBottom: 0 }}>
+                    Invalid Username or Password
+                </p>
+            )}
             <Button
                 className={clsx(classes.marginTop)}
                 variant="contained"
                 color="primary"
-                href="/home"
+                // href="/home"
+                onClick={() => {
+                    authenticateUser()
+                }}
             >
                 Login
             </Button>
