@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import clsx from 'clsx'
 
 import Paper from '@material-ui/core/Paper'
@@ -10,16 +10,22 @@ import {
     Switch,
     Route,
     Link,
+    useHistory,
     Redirect,
 } from 'react-router-dom'
 
 import useStyles from './styles'
 import Nutrition from './Nutrition'
 import Fitness from './Fitness'
+import { Context } from '../context/Store'
+import Settings from './Settings'
 
 const Home = () => {
     const classes = useStyles()
+    const history = useHistory()
+
     const [value, setValue] = useState(0)
+    const [state, dispatch] = useContext(Context)
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -42,6 +48,7 @@ const Home = () => {
                             to="/nutrition"
                         />
                         <Tab component={Link} label="Fitness" to="/fitness" />
+                        <Tab component={Link} label="Settings" to="/settings" />
                     </Tabs>
                 </Paper>
 
@@ -55,7 +62,21 @@ const Home = () => {
                     <Route path="/fitness">
                         <Fitness />
                     </Route>
+                    <Route path="/settings">
+                        <Settings />
+                    </Route>
                 </Switch>
+                <div className={classes.linkContainer}>
+                    <Link
+                        to={'/'}
+                        onClick={() => {
+                            dispatch({ type: 'SIGN_OUT', payload: '' })
+                            history.push('/')
+                        }}
+                    >
+                        Log Out
+                    </Link>
+                </div>
             </div>
         </Router>
     )

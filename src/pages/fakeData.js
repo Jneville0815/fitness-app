@@ -101,6 +101,18 @@ export const food = [
         carbs: 126,
         fat: 60.5,
     },
+    {
+        name: '1 Egg',
+        protein: 7,
+        carbs: 0,
+        fat: 5,
+    },
+    {
+        name: 'Tbsp of Butter',
+        protein: 0,
+        carbs: 0,
+        fat: 11,
+    },
 ]
 
 export const user = {

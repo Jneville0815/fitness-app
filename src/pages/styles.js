@@ -41,6 +41,12 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'flex-start',
     },
+    linkContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
 }))
 
 export default useStyles

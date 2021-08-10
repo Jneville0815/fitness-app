@@ -18,17 +18,27 @@ import TextField from '@material-ui/core/TextField'
 
 import useStyles from './styles'
 import { Context } from '../context/Store'
-import { food, user } from './fakeData'
+import backend from '../api/backend'
+// import { food } from './fakeData'
 
 const Nutrition = () => {
     const classes = useStyles()
 
     const [currentFoods, setCurrentFoods] = useState([])
     const [foodSelectionIndex, setFoodSelectionIndex] = useState('')
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState({
+        name: '',
+        currentProtein: 0,
+        currentCarbs: 0,
+        currentFat: 0,
+        targetProtein: 0,
+        targetCarbs: 0,
+        targetFat: 0,
+        food: [],
+    })
     const [inputValue, setInputValue] = useState('')
     const [state, dispatch] = useContext(Context)
-    console.log(state)
+
     const handleChange = (event) => {
         setFoodSelectionIndex(event.target.value)
     }
@@ -37,8 +47,33 @@ const Nutrition = () => {
         setInputValue(event.target.value)
     }
 
+    const getUserInfo = async () => {
+        try {
+            const response = await backend.get(`/userInfo/${state.email}`, {
+                headers: {
+                    Authorization: `Bearer ${state.apiToken}`,
+                },
+            })
+
+            const newData = {
+                name: response.data.name,
+                currentProtein: response.data.nutrition['currentProtein'],
+                currentCarbs: response.data.nutrition['currentCarbs'],
+                currentFat: response.data.nutrition['currentFat'],
+                targetProtein: response.data.nutrition['targetProtein'],
+                targetCarbs: response.data.nutrition['targetCarbs'],
+                targetFat: response.data.nutrition['targetFat'],
+                food: response.data.food,
+            }
+
+            setUserData(newData)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
-        setUserData(user)
+        getUserInfo()
     }, [])
 
     return (
@@ -71,7 +106,7 @@ const Nutrition = () => {
                         value={foodSelectionIndex}
                         onChange={handleChange}
                     >
-                        {food.map((food, index) => {
+                        {userData.food.map((food, index) => {
                             return (
                                 <MenuItem key={index} value={index}>
                                     {food.name}
@@ -88,19 +123,19 @@ const Nutrition = () => {
                         if (foodSelectionIndex !== '') {
                             setCurrentFoods([
                                 ...currentFoods,
-                                food[foodSelectionIndex],
+                                userData.food[foodSelectionIndex],
                             ])
                             setUserData({
                                 ...userData,
                                 currentProtein:
                                     userData.currentProtein +
-                                    food[foodSelectionIndex].protein,
+                                    userData.food[foodSelectionIndex].protein,
                                 currentCarbs:
                                     userData.currentCarbs +
-                                    food[foodSelectionIndex].carbs,
+                                    userData.food[foodSelectionIndex].carbs,
                                 currentFat:
                                     userData.currentFat +
-                                    food[foodSelectionIndex].fat,
+                                    userData.food[foodSelectionIndex].fat,
                             })
                         }
                     }}
@@ -200,7 +235,7 @@ const Nutrition = () => {
                     color="secondary"
                     onClick={() => {
                         setCurrentFoods([])
-                        setUserData(user)
+                        getUserInfo()
                     }}
                 >
                     Reset
