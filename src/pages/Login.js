@@ -103,7 +103,7 @@ const Login = () => {
             </FormControl>
             {error && (
                 <p style={{ color: 'red', marginBottom: 0 }}>
-                    Invalid Username or Password
+                    Invalid Username Or Password
                 </p>
             )}
             <Button
