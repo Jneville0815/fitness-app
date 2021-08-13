@@ -47,6 +47,58 @@ const Nutrition = () => {
         setInputValue(event.target.value)
     }
 
+    const dailyReset = async () => {
+        try {
+            const response = await backend.post(
+                `/userInfo/${state.email}/dailyReset`
+            )
+            if (response.status === 200) {
+                getUserInfo()
+                console.log('Success')
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const updateCurrentFood = async (food, protein, carbs, fat) => {
+        try {
+            const response = await backend.post(
+                `/userInfo/${state.email}/addCurrentFood`,
+                {
+                    ...food,
+                    currentProtein: protein,
+                    currentCarbs: carbs,
+                    currentFat: fat,
+                }
+            )
+            if (response.status === 200) {
+                console.log('Success')
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const removeCurrentFood = async (food, protein, carbs, fat) => {
+        try {
+            const response = await backend.post(
+                `/userInfo/${state.email}/removeCurrentFood`,
+                {
+                    ...food,
+                    currentProtein: protein,
+                    currentCarbs: carbs,
+                    currentFat: fat,
+                }
+            )
+            if (response.status === 200) {
+                console.log('Success')
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     const getUserInfo = async () => {
         try {
             const response = await backend.get(`/userInfo/${state.email}`, {
@@ -66,6 +118,7 @@ const Nutrition = () => {
                 food: response.data.food,
             }
 
+            setCurrentFoods(response.data.currentFood)
             setUserData(newData)
         } catch (err) {
             console.log(err)
@@ -125,18 +178,27 @@ const Nutrition = () => {
                                 ...currentFoods,
                                 userData.food[foodSelectionIndex],
                             ])
+                            const tempProtein =
+                                userData.currentProtein +
+                                userData.food[foodSelectionIndex].protein
+                            const tempCarbs =
+                                userData.currentCarbs +
+                                userData.food[foodSelectionIndex].carbs
+                            const tempFat =
+                                userData.currentFat +
+                                userData.food[foodSelectionIndex].fat
                             setUserData({
                                 ...userData,
-                                currentProtein:
-                                    userData.currentProtein +
-                                    userData.food[foodSelectionIndex].protein,
-                                currentCarbs:
-                                    userData.currentCarbs +
-                                    userData.food[foodSelectionIndex].carbs,
-                                currentFat:
-                                    userData.currentFat +
-                                    userData.food[foodSelectionIndex].fat,
+                                currentProtein: tempProtein,
+                                currentCarbs: tempCarbs,
+                                currentFat: tempFat,
                             })
+                            updateCurrentFood(
+                                userData.food[foodSelectionIndex],
+                                tempProtein,
+                                tempCarbs,
+                                tempFat
+                            )
                         }
                     }}
                 >
@@ -191,19 +253,27 @@ const Nutrition = () => {
                                     <TableCell align="right">
                                         <IconButton
                                             onClick={() => {
+                                                const tempProtein =
+                                                    userData.currentProtein -
+                                                    currentFoods[i].protein
+                                                const tempCarbs =
+                                                    userData.currentCarbs -
+                                                    currentFoods[i].carbs
+                                                const tempFat =
+                                                    userData.currentFat -
+                                                    currentFoods[i].fat
                                                 setUserData({
                                                     ...userData,
-                                                    currentProtein:
-                                                        userData.currentProtein -
-                                                        currentFoods[i].protein,
-                                                    currentCarbs:
-                                                        userData.currentCarbs -
-                                                        currentFoods[i].carbs,
-                                                    currentFat:
-                                                        userData.currentFat -
-                                                        currentFoods[i].fat,
+                                                    currentProtein: tempProtein,
+                                                    currentCarbs: tempCarbs,
+                                                    currentFat: tempFat,
                                                 })
-
+                                                removeCurrentFood(
+                                                    currentFoods[i],
+                                                    tempProtein,
+                                                    tempCarbs,
+                                                    tempFat
+                                                )
                                                 let temp = [...currentFoods]
                                                 temp.splice(i, 1)
                                                 setCurrentFoods(temp)
@@ -234,8 +304,7 @@ const Nutrition = () => {
                     variant="contained"
                     color="secondary"
                     onClick={() => {
-                        setCurrentFoods([])
-                        getUserInfo()
+                        dailyReset()
                     }}
                 >
                     Reset

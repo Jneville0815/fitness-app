@@ -1,5 +1,4 @@
-import React, { useState, useContext } from 'react'
-import clsx from 'clsx'
+import React, { useState, useContext, useEffect } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
@@ -11,7 +10,6 @@ import {
     Route,
     Link,
     useHistory,
-    Redirect,
 } from 'react-router-dom'
 
 import useStyles from './styles'
@@ -30,6 +28,12 @@ const Home = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue)
     }
+
+    useEffect(() => {
+        if (state.apiToken === '') {
+            history.push('/')
+        }
+    }, [])
 
     return (
         <Router>
