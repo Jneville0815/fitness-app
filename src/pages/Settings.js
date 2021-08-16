@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import clsx from 'clsx'
 
 import Button from '@material-ui/core/Button'
@@ -20,9 +20,56 @@ const Settings = () => {
         fat: '',
         information: 'N/A',
     })
+    const [maxLifts, setMaxLifts] = useState({
+        benchMax: 0,
+        deadliftMax: 0,
+        squatMax: 0,
+        pressMax: 0,
+    })
     const [submitted, setSubmitted] = useState(false)
+    const [fitnessSubmitted, setFitnessSubmitted] = useState(false)
     const [submittedLabel, setSubmittedLabel] = useState('')
+    const [fitnessSubmittedLabel, setFitnessSubmittedLabel] = useState('')
     const [state, dispatch] = useContext(Context)
+
+    const retrieveMaxLifts = async () => {
+        try {
+            const response = await backend.get(
+                `/userInfo/${state.email}/fitness`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${state.apiToken}`,
+                    },
+                }
+            )
+            setMaxLifts(response.data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const submitNewFitness = async () => {
+        try {
+            const response = await backend.post(
+                `/userInfo/${state.email}/fitness`,
+                maxLifts
+            )
+            if (response.status === 200) {
+                setFitnessSubmittedLabel('Updated!')
+                setFitnessSubmitted(true)
+                setTimeout(() => {
+                    setFitnessSubmitted(false)
+                }, 2000)
+            }
+        } catch (err) {
+            setFitnessSubmittedLabel('Failed to Update')
+            setFitnessSubmitted(true)
+            setTimeout(() => {
+                setFitnessSubmitted(false)
+            }, 2000)
+            console.log(err)
+        }
+    }
 
     const submitNewFood = async () => {
         try {
@@ -52,6 +99,15 @@ const Settings = () => {
     const handleChange = (prop) => (event) => {
         setNutrients({ ...nutrients, [prop]: event.target.value })
     }
+
+    const handleFitnessChange = (prop) => (event) => {
+        setMaxLifts({ ...maxLifts, [prop]: event.target.value })
+    }
+
+    useEffect(() => {
+        retrieveMaxLifts()
+    }, [])
+
     return (
         <div className={clsx(classes.root)}>
             <h1>Settings Page</h1>
@@ -145,6 +201,80 @@ const Settings = () => {
                     }}
                 >
                     Add
+                </Button>
+            </div>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    marginTop: 50,
+                }}
+            >
+                <h2>Update Max Lifts</h2>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Bench</InputLabel>
+                    <Input
+                        type={'text'}
+                        value={maxLifts.benchMax}
+                        onChange={handleFitnessChange('benchMax')}
+                    />
+                </FormControl>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Deadlift</InputLabel>
+                    <Input
+                        type={'text'}
+                        value={maxLifts.deadliftMax}
+                        onChange={handleFitnessChange('deadliftMax')}
+                    />
+                </FormControl>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Squat</InputLabel>
+                    <Input
+                        type={'text'}
+                        value={maxLifts.squatMax}
+                        onChange={handleFitnessChange('squatMax')}
+                    />
+                </FormControl>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Press</InputLabel>
+                    <Input
+                        type={'text'}
+                        value={maxLifts.pressMax}
+                        onChange={handleFitnessChange('pressMax')}
+                    />
+                </FormControl>
+                {fitnessSubmitted && (
+                    <p
+                        style={{
+                            color:
+                                fitnessSubmittedLabel === 'Failed to Update'
+                                    ? 'red'
+                                    : 'green',
+                            marginBottom: 0,
+                        }}
+                    >
+                        {fitnessSubmittedLabel}
+                    </p>
+                )}
+                <Button
+                    className={clsx(classes.marginTop)}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        submitNewFitness()
+                    }}
+                >
+                    Update
                 </Button>
             </div>
         </div>

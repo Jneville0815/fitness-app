@@ -19,7 +19,6 @@ import TextField from '@material-ui/core/TextField'
 import useStyles from './styles'
 import { Context } from '../context/Store'
 import backend from '../api/backend'
-// import { food } from './fakeData'
 
 const Nutrition = () => {
     const classes = useStyles()
