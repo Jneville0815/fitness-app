@@ -297,6 +297,10 @@ const Nutrition = () => {
                 value={inputValue}
                 variant="outlined"
             />
+            <p>
+                Totals: Protein={userData.currentProtein}, Carbs=
+                {userData.currentCarbs}, Fat={userData.currentFat}
+            </p>
             {currentFoods.length > 0 && (
                 <Button
                     className={clsx(classes.marginTop)}
