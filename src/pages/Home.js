@@ -15,6 +15,7 @@ import {
 import useStyles from './styles'
 import Nutrition from './Nutrition'
 import Fitness from './Fitness'
+import Quotes from './Quotes'
 import { Context } from '../context/Store'
 import Settings from './Settings'
 
@@ -52,6 +53,7 @@ const Home = () => {
                             to="/nutrition"
                         />
                         <Tab component={Link} label="Fitness" to="/fitness" />
+                        <Tab component={Link} label="Quotes" to="/quotes" />
                         <Tab component={Link} label="Settings" to="/settings" />
                     </Tabs>
                 </Paper>
@@ -65,6 +67,9 @@ const Home = () => {
                     </Route>
                     <Route path="/fitness">
                         <Fitness />
+                    </Route>
+                    <Route path="/quotes">
+                        <Quotes />
                     </Route>
                     <Route path="/settings">
                         <Settings />
