@@ -8,8 +8,7 @@ import { Context } from '../context/Store'
 import { backend_url } from '../api/backend'
 
 const Quotes = () => {
-    const [title, setTitle] = useState('')
-    const [page, setPage] = useState('')
+    const [source, setSource] = useState('')
     const [quote, setQuote] = useState('')
 
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -26,20 +25,18 @@ const Quotes = () => {
         }, 2000)
     }
 
-    const addQuote = async (title, page, quote) => {
-        if (title.length > 0 && page.length > 0 && quote.length > 0) {
+    const addQuote = async (source, quote) => {
+        if (source.length > 0 && quote.length > 0) {
             try {
                 const response = await backend.post(
                     `/userInfo/${state.email}/addQuote`,
                     {
-                        title,
-                        page,
+                        source,
                         quote,
                     }
                 )
                 if (response.status === 200) {
-                    setTitle('')
-                    setPage('')
+                    setSource('')
                     setQuote('')
                     setShowSuccessMessage(true)
                     setTimeout(() => {
@@ -63,17 +60,9 @@ const Quotes = () => {
             <TextField
                 id="outlined-multiline-static"
                 style={{ marginTop: 30, width: '30ch' }}
-                label="Insert Book Title"
-                onChange={(e) => setTitle(e.target.value)}
-                value={title}
-                variant="outlined"
-            />
-            <TextField
-                id="outlined-multiline-static"
-                style={{ marginTop: 30, width: '30ch' }}
-                label="Insert Page Number"
-                onChange={(e) => setPage(e.target.value)}
-                value={page}
+                label="Insert Source"
+                onChange={(e) => setSource(e.target.value)}
+                value={source}
                 variant="outlined"
             />
             <TextField
@@ -90,7 +79,7 @@ const Quotes = () => {
                 className={clsx(classes.marginTop)}
                 variant="contained"
                 color="primary"
-                onClick={() => addQuote(title, page, quote)}
+                onClick={() => addQuote(source, quote)}
             >
                 Add
             </Button>
