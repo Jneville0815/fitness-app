@@ -5,15 +5,15 @@ const Reducer = (state, action) => {
                 ...state,
                 apiToken: action.payload,
             }
-        case 'SET_EMAIL':
+        case 'SET_USER_ID':
             return {
                 ...state,
-                email: action.payload,
+                user_id: action.payload,
             }
         case 'SIGN_OUT':
             return {
                 apiToken: '',
-                email: '',
+                user_id: '',
             }
         default:
             return state

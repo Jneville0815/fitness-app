@@ -34,7 +34,7 @@ const Fitness = () => {
     const retrieveMaxLifts = async () => {
         try {
             const response = await backend.get(
-                `/userInfo/${state.email}/fitness`,
+                `/userInfo/${state.user_id}/fitness`,
                 {
                     headers: {
                         Authorization: `Bearer ${state.apiToken}`,

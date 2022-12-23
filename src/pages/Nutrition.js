@@ -49,7 +49,13 @@ const Nutrition = () => {
     const dailyReset = async () => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.email}/dailyReset`
+                `/userInfo/${state.user_id}/dailyReset`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${state.apiToken}`,
+                    },
+                }
             )
             if (response.status === 200) {
                 getUserInfo()
@@ -63,12 +69,17 @@ const Nutrition = () => {
     const updateCurrentFood = async (food, protein, carbs, fat) => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.email}/addCurrentFood`,
+                `/userInfo/${state.user_id}/addCurrentFood`,
                 {
                     ...food,
                     currentProtein: protein,
                     currentCarbs: carbs,
                     currentFat: fat,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${state.apiToken}`,
+                    },
                 }
             )
             if (response.status === 200) {
@@ -82,12 +93,17 @@ const Nutrition = () => {
     const removeCurrentFood = async (food, protein, carbs, fat) => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.email}/removeCurrentFood`,
+                `/userInfo/${state.user_id}/removeCurrentFood`,
                 {
                     ...food,
                     currentProtein: protein,
                     currentCarbs: carbs,
                     currentFat: fat,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${state.apiToken}`,
+                    },
                 }
             )
             if (response.status === 200) {
@@ -100,7 +116,7 @@ const Nutrition = () => {
 
     const getUserInfo = async () => {
         try {
-            const response = await backend.get(`/userInfo/${state.email}`, {
+            const response = await backend.get(`/userInfo/${state.user_id}`, {
                 headers: {
                     Authorization: `Bearer ${state.apiToken}`,
                 },

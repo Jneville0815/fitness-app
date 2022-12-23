@@ -3,7 +3,7 @@ import Reducer from './Reducer'
 
 const initialState = {
     apiToken: '',
-    email: '',
+    user_id: '',
 }
 
 const Store = ({ children }) => {

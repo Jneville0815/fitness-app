@@ -29,10 +29,15 @@ const Quotes = () => {
         if (source.length > 0 && quote.length > 0) {
             try {
                 const response = await backend.post(
-                    `/userInfo/${state.email}/addQuote`,
+                    `/userInfo/${state.user_id}/addQuote`,
                     {
                         source,
                         quote,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${state.apiToken}`,
+                        },
                     }
                 )
                 if (response.status === 200) {
@@ -106,7 +111,7 @@ const Quotes = () => {
             <a
                 className={clsx(classes.marginTop)}
                 target="_blank"
-                href={`${backend_url}/userInfo/${state.email}/getAllQuotes`}
+                href={`${backend_url}/userInfo/${state.user_id}/getAllQuotes`}
             >
                 Get All Quotes
             </a>

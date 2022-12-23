@@ -35,7 +35,7 @@ const Settings = () => {
     const retrieveMaxLifts = async () => {
         try {
             const response = await backend.get(
-                `/userInfo/${state.email}/fitness`,
+                `/userInfo/${state.user_id}/fitness`,
                 {
                     headers: {
                         Authorization: `Bearer ${state.apiToken}`,
@@ -51,8 +51,13 @@ const Settings = () => {
     const submitNewFitness = async () => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.email}/fitness`,
-                maxLifts
+                `/userInfo/${state.user_id}/fitness`,
+                maxLifts,
+                {
+                    headers: {
+                        Authorization: `Bearer ${state.apiToken}`,
+                    },
+                }
             )
             if (response.status === 200) {
                 setFitnessSubmittedLabel('Updated!')
@@ -74,8 +79,13 @@ const Settings = () => {
     const submitNewFood = async () => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.email}/addFood`,
-                nutrients
+                `/userInfo/${state.user_id}/addFood`,
+                nutrients,
+                {
+                    headers: {
+                        Authorization: `Bearer ${state.apiToken}`,
+                    },
+                }
             )
             if (response.status === 200) {
                 setSubmittedLabel('Submitted!')
