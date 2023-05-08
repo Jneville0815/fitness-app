@@ -35,15 +35,10 @@ const Nutrition = () => {
         targetFat: 0,
         food: [],
     })
-    const [inputValue, setInputValue] = useState('')
     const [state, dispatch] = useContext(Context)
 
     const handleChange = (event) => {
         setFoodSelectionIndex(event.target.value)
-    }
-
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value)
     }
 
     const dailyReset = async () => {
@@ -144,35 +139,41 @@ const Nutrition = () => {
         getUserInfo()
     }, [])
 
-    const neededCalories =
+    const targetCalories =
         userData.targetProtein * 4 +
         userData.targetCarbs * 4 +
-        userData.targetFat * 9 -
-        (userData.currentProtein * 4 +
-            userData.currentCarbs * 4 +
-            userData.currentFat * 9)
+        userData.targetFat * 9
+
+    const currentCalories =
+        userData.currentProtein * 4 +
+        userData.currentCarbs * 4 +
+        userData.currentFat * 9
 
     return (
         <div className={clsx(classes.root)}>
             <h1>Nutrition Page</h1>
             <p>
-                {userData.name} still needs: ({neededCalories.toFixed(1)}{' '}
-                calories)
+                {userData.name}'s calories:{' '}
+                {(targetCalories - currentCalories).toFixed(0)}/
+                {targetCalories.toFixed(0)}
             </p>
 
             <div className={clsx(classes.macros)}>
                 <p>
-                    Fat: {(userData.targetFat - userData.currentFat).toFixed(1)}
+                    Fat: {(userData.targetFat - userData.currentFat).toFixed(0)}
+                    /{userData.targetFat.toFixed(0)}
                 </p>
                 <p>
                     Carbs:{' '}
-                    {(userData.targetCarbs - userData.currentCarbs).toFixed(1)}
+                    {(userData.targetCarbs - userData.currentCarbs).toFixed(0)}/
+                    {userData.targetCarbs.toFixed(0)}
                 </p>
                 <p>
                     Protein:{' '}
                     {(userData.targetProtein - userData.currentProtein).toFixed(
-                        1
+                        0
                     )}
+                    /{userData.targetProtein.toFixed(0)}
                 </p>
             </div>
             <div className={classes.addContainer}>
@@ -313,20 +314,6 @@ const Nutrition = () => {
                     </Table>
                 </TableContainer>
             )}
-            <TextField
-                id="outlined-multiline-static"
-                style={{ marginTop: 30, width: '30ch' }}
-                label="Additional Notes"
-                multiline
-                rows={4}
-                onChange={handleInputChange}
-                value={inputValue}
-                variant="outlined"
-            />
-            <p>
-                Totals: Protein={userData.currentProtein}, Carbs=
-                {userData.currentCarbs}, Fat={userData.currentFat}
-            </p>
             {currentFoods.length > 0 && (
                 <Button
                     className={clsx(classes.marginTop)}
