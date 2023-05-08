@@ -18,9 +18,10 @@ const useStyles = makeStyles((theme) => ({
     },
     macros: {
         display: 'flex',
-        flexDirection: 'row',
-        width: '35ch',
-        justifyContent: 'space-between',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
     },
     textField: {
         width: '25ch',
@@ -35,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     table: {
         width: 650,
         margin: '0 auto',
+    },
+    noSpaceP: {
+        marginTop: 3,
+        marginBottom: 3,
     },
     addContainer: {
         marginBottom: 10,

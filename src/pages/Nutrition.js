@@ -152,23 +152,32 @@ const Nutrition = () => {
     return (
         <div className={clsx(classes.root)}>
             <h1>Nutrition Page</h1>
-            <p>
-                {userData.name}'s calories: {currentCalories.toFixed(0)}/
-                {targetCalories.toFixed(0)}
-            </p>
-
             <div className={clsx(classes.macros)}>
-                <p>
-                    Fat: {userData.currentFat.toFixed(0)}/
-                    {userData.targetFat.toFixed(0)}
+                <p className={clsx(classes.noSpaceP)}>
+                    {userData.name}'s Macros (total - consumed = remaining):
                 </p>
-                <p>
-                    Carbs: {userData.currentCarbs.toFixed(0)}/
-                    {userData.targetCarbs.toFixed(0)}
+                <p className={clsx(classes.noSpaceP)}>
+                    Calories: {targetCalories.toFixed(0)} -{' '}
+                    {currentCalories.toFixed(0)} ={' '}
+                    {targetCalories.toFixed(0) - currentCalories.toFixed(0)}
                 </p>
-                <p>
-                    Protein: {userData.currentProtein.toFixed(0)}/
-                    {userData.targetProtein.toFixed(0)}
+                <p className={clsx(classes.noSpaceP)}>
+                    Fat: {userData.targetFat.toFixed(0)} -{' '}
+                    {userData.currentFat.toFixed(0)} ={' '}
+                    {userData.targetFat.toFixed(0) -
+                        userData.currentFat.toFixed(0)}
+                </p>
+                <p className={clsx(classes.noSpaceP)}>
+                    Carbs: {userData.targetCarbs.toFixed(0)} -{' '}
+                    {userData.currentCarbs.toFixed(0)} ={' '}
+                    {userData.targetCarbs.toFixed(0) -
+                        userData.currentCarbs.toFixed(0)}
+                </p>
+                <p className={clsx(classes.noSpaceP)}>
+                    Protein: {userData.targetProtein.toFixed(0)} -{' '}
+                    {userData.currentProtein.toFixed(0)} ={' '}
+                    {userData.targetProtein.toFixed(0) -
+                        userData.currentProtein.toFixed(0)}
                 </p>
             </div>
             <div className={classes.addContainer}>
