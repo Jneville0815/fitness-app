@@ -144,25 +144,35 @@ const Nutrition = () => {
         getUserInfo()
     }, [])
 
+    const neededCalories =
+        userData.targetProtein * 4 +
+        userData.targetCarbs * 4 +
+        userData.targetFat * 9 -
+        (userData.currentProtein * 4 +
+            userData.currentCarbs * 4 +
+            userData.currentFat * 9)
+
     return (
         <div className={clsx(classes.root)}>
             <h1>Nutrition Page</h1>
             <p>
-                {userData.name} still needs: (
-                {userData.targetProtein * 4 +
-                    userData.targetCarbs * 4 +
-                    userData.targetFat * 9 -
-                    (userData.currentProtein * 4 +
-                        userData.currentCarbs * 4 +
-                        userData.currentFat * 9)}{' '}
+                {userData.name} still needs: ({neededCalories.toFixed(1)}{' '}
                 calories)
             </p>
 
             <div className={clsx(classes.macros)}>
-                <p>Fat: {userData.targetFat - userData.currentFat}</p>
-                <p>Carbs: {userData.targetCarbs - userData.currentCarbs}</p>
                 <p>
-                    Protein: {userData.targetProtein - userData.currentProtein}
+                    Fat: {(userData.targetFat - userData.currentFat).toFixed(1)}
+                </p>
+                <p>
+                    Carbs:{' '}
+                    {(userData.targetCarbs - userData.currentCarbs).toFixed(1)}
+                </p>
+                <p>
+                    Protein:{' '}
+                    {(userData.targetProtein - userData.currentProtein).toFixed(
+                        1
+                    )}
                 </p>
             </div>
             <div className={classes.addContainer}>
