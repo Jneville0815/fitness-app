@@ -30,35 +30,30 @@ const Home = () => {
         setValue(newValue)
     }
 
-    useEffect(() => {
-        if (state.apiToken === '') {
-            history.push('/')
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (state.apiToken === '') {
+    //         history.push('/')
+    //     }
+    // }, [])
 
     return (
-        <Router>
-            <div>
-                <Paper className={classes.tabs}>
-                    <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        centered
-                    >
-                        <Tab
-                            component={Link}
-                            label="Nutrition"
-                            to="/nutrition"
-                        />
-                        <Tab component={Link} label="Fitness" to="/fitness" />
-                        <Tab component={Link} label="Quotes" to="/quotes" />
-                        <Tab component={Link} label="Settings" to="/settings" />
-                    </Tabs>
-                </Paper>
+        <div>
+            <Paper className={classes.tabs}>
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered
+                >
+                    <Tab component={Link} label="Nutrition" to="/nutrition" />
+                    <Tab component={Link} label="Fitness" to="/fitness" />
+                    <Tab component={Link} label="Quotes" to="/quotes" />
+                    <Tab component={Link} label="Settings" to="/settings" />
+                </Tabs>
+            </Paper>
 
-                <Switch>
+            {/* <Switch>
                     <Route exact path="/home">
                         <Nutrition />
                     </Route>
@@ -74,20 +69,19 @@ const Home = () => {
                     <Route path="/settings">
                         <Settings />
                     </Route>
-                </Switch>
-                <div className={classes.linkContainer}>
-                    <Link
-                        to={'/'}
-                        onClick={() => {
-                            dispatch({ type: 'SIGN_OUT', payload: '' })
-                            history.push('/')
-                        }}
-                    >
-                        Log Out
-                    </Link>
-                </div>
+                </Switch> */}
+            <div className={classes.linkContainer}>
+                <Link
+                    to={'/'}
+                    onClick={() => {
+                        dispatch({ type: 'SIGN_OUT', payload: '' })
+                        history.push('/')
+                    }}
+                >
+                    Log Out
+                </Link>
             </div>
-        </Router>
+        </div>
     )
 }
 

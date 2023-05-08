@@ -47,8 +47,10 @@ const Login = () => {
                 email,
                 password,
             })
+            // should these be called only if status is 200?
             dispatch({ type: 'SET_TOKEN', payload: response.data.token })
             dispatch({ type: 'SET_USER_ID', payload: response.data.user_id })
+            localStorage.setItem('token', response.data.token)
             if (response.status === 200) {
                 setValues({ ...values, email: '', password: '' })
                 console.log('Login Success')
