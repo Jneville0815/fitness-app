@@ -153,27 +153,22 @@ const Nutrition = () => {
         <div className={clsx(classes.root)}>
             <h1>Nutrition Page</h1>
             <p>
-                {userData.name}'s calories:{' '}
-                {(targetCalories - currentCalories).toFixed(0)}/
+                {userData.name}'s calories: {currentCalories.toFixed(0)}/
                 {targetCalories.toFixed(0)}
             </p>
 
             <div className={clsx(classes.macros)}>
                 <p>
-                    Fat: {(userData.targetFat - userData.currentFat).toFixed(0)}
-                    /{userData.targetFat.toFixed(0)}
+                    Fat: {userData.currentFat.toFixed(0)}/
+                    {userData.targetFat.toFixed(0)}
                 </p>
                 <p>
-                    Carbs:{' '}
-                    {(userData.targetCarbs - userData.currentCarbs).toFixed(0)}/
+                    Carbs: {userData.currentCarbs.toFixed(0)}/
                     {userData.targetCarbs.toFixed(0)}
                 </p>
                 <p>
-                    Protein:{' '}
-                    {(userData.targetProtein - userData.currentProtein).toFixed(
-                        0
-                    )}
-                    /{userData.targetProtein.toFixed(0)}
+                    Protein: {userData.currentProtein.toFixed(0)}/
+                    {userData.targetProtein.toFixed(0)}
                 </p>
             </div>
             <div className={classes.addContainer}>
