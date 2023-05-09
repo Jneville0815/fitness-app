@@ -47,9 +47,16 @@ const Login = () => {
                 email,
                 password,
             })
-            dispatch({ type: 'SET_TOKEN', payload: response.data.token })
-            dispatch({ type: 'SET_USER_ID', payload: response.data.user_id })
             if (response.status === 200) {
+                dispatch({
+                    type: 'SET_TOKEN',
+                    payload: response.data.token,
+                })
+                dispatch({
+                    type: 'SET_USER_ID',
+                    payload: response.data.user_id,
+                })
+                localStorage.setItem('token', response.data.token)
                 setValues({ ...values, email: '', password: '' })
                 console.log('Login Success')
                 setError(false)
