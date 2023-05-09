@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core//MenuItem'
+import Select from '@material-ui/core//Select'
 
 import useStyles from './styles'
 import backend from '../api/backend'
@@ -25,6 +27,22 @@ const Settings = () => {
         squatMax: 0,
         pressMax: 0,
     })
+    const [profile, setProfile] = useState({
+        age: '',
+        sex: '',
+        heightFeet: '',
+        heightInches: '',
+        weight: '',
+        goal: '',
+        activityLevel: '',
+    })
+    const [calculatedMacros, setCalculatedMacros] = useState({
+        calories: '',
+        protein: '',
+        carbs: '',
+        fat: '',
+    })
+    const [calculationSubmitted, setCalculationSubmitted] = useState(false)
     const [submitted, setSubmitted] = useState(false)
     const [fitnessSubmitted, setFitnessSubmitted] = useState(false)
     const [submittedLabel, setSubmittedLabel] = useState('')
@@ -110,12 +128,96 @@ const Settings = () => {
         }
     }
 
+    const calculateMacros = () => {
+        let calories = 0
+        let daily_cal = 0
+        let fat = 0
+        let carbs = 0
+        let protein = 0
+
+        let height =
+            parseInt(profile.heightFeet) * 30.48 +
+            parseInt(profile.heightInches) * 2.54
+
+        let orgWeight = parseInt(profile.weight)
+
+        let weight = orgWeight * 0.453592
+
+        let age = parseInt(profile.age)
+
+        if (profile.sex === 0) {
+            // male
+            calories = weight * 10 + height * 6.25 - age * 5 + 5
+            daily_cal = Math.round(calories)
+        } else {
+            // female
+            calories = weight * 10 + height * 6.25 - age * 5 - 161
+            daily_cal = Math.round(calories)
+        }
+
+        switch (profile.activityLevel) {
+            case 0:
+                calories = Math.round(calories * 1.2)
+                break
+            case 1:
+                calories = Math.round(calories * 1.375)
+                break
+            case 2:
+                calories = Math.round(calories * 1.466)
+                break
+            case 3:
+                calories = Math.round(calories * 1.55)
+                break
+            case 4:
+                calories = Math.round(calories * 1.725)
+                break
+            case 5:
+                calories = Math.round(calories * 1.9)
+                break
+        }
+
+        switch (profile.goal) {
+            case 0:
+                if (calories <= 2000) calories = Math.round(0.9 * calories)
+                if (calories > 2000) calories = Math.round(0.8 * calories)
+                fat = Math.round(orgWeight * 0.3)
+                break
+            case 1:
+                fat = Math.round(orgWeight * 0.4)
+                break
+            case 2:
+                calories += 200
+                fat = Math.round(orgWeight * 0.5)
+                break
+        }
+
+        protein = orgWeight
+        let pCalories = protein * 4
+        let fCalories = fat * 9
+        let pfCalories = pCalories + fCalories
+
+        carbs = Math.round((calories - pfCalories) / 4)
+
+        setCalculatedMacros({
+            ...calculatedMacros,
+            calories,
+            fat,
+            protein,
+            carbs,
+        })
+        setCalculationSubmitted(true)
+    }
+
     const handleChange = (prop) => (event) => {
         setNutrients({ ...nutrients, [prop]: event.target.value })
     }
 
     const handleFitnessChange = (prop) => (event) => {
         setMaxLifts({ ...maxLifts, [prop]: event.target.value })
+    }
+
+    const handleProfileChange = (prop) => (event) => {
+        setProfile({ ...profile, [prop]: event.target.value })
     }
 
     useEffect(() => {
@@ -132,6 +234,143 @@ const Settings = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'column',
+                }}
+            >
+                <h2>Profile</h2>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Age</InputLabel>
+                    <Input
+                        type={'text'}
+                        value={profile.age}
+                        onChange={handleProfileChange('age')}
+                    />
+                </FormControl>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Sex</InputLabel>
+                    <Select
+                        value={profile.sex}
+                        onChange={handleProfileChange('sex')}
+                    >
+                        <MenuItem value={0}>Male</MenuItem>
+                        <MenuItem value={1}>Female</MenuItem>
+                    </Select>
+                </FormControl>
+                <div>
+                    <FormControl
+                        className={clsx(classes.margin, classes.sexField)}
+                    >
+                        <InputLabel>Height (ft)</InputLabel>
+                        <Select
+                            value={profile.heightFeet}
+                            onChange={handleProfileChange('heightFeet')}
+                        >
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={6}>6</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl
+                        className={clsx(classes.margin, classes.sexField)}
+                    >
+                        <InputLabel>Height (in)</InputLabel>
+                        <Select
+                            value={profile.heightInches}
+                            onChange={handleProfileChange('heightInches')}
+                        >
+                            <MenuItem value={0}>0</MenuItem>
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={6}>6</MenuItem>
+                            <MenuItem value={7}>7</MenuItem>
+                            <MenuItem value={8}>8</MenuItem>
+                            <MenuItem value={9}>9</MenuItem>
+                            <MenuItem value={10}>10</MenuItem>
+                            <MenuItem value={11}>11</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Weight (lbs)</InputLabel>
+                    <Input
+                        type={'text'}
+                        value={profile.weight}
+                        onChange={handleProfileChange('weight')}
+                    />
+                </FormControl>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Goal</InputLabel>
+                    <Select
+                        value={profile.goal}
+                        onChange={handleProfileChange('goal')}
+                    >
+                        <MenuItem value={0}>Fat Loss</MenuItem>
+                        <MenuItem value={1}>Maintenance</MenuItem>
+                        <MenuItem value={2}>Gain Muscle</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl
+                    className={clsx(classes.margin, classes.textField)}
+                >
+                    <InputLabel>Activity Level</InputLabel>
+                    <Select
+                        value={profile.activityLevel}
+                        onChange={handleProfileChange('activityLevel')}
+                    >
+                        <MenuItem value={0}>None</MenuItem>
+                        <MenuItem value={1}>1-3 times per week</MenuItem>
+                        <MenuItem value={2}>4-5 times per week</MenuItem>
+                        <MenuItem value={3}>Daily Moderate</MenuItem>
+                        <MenuItem value={4}>Daily Intense</MenuItem>
+                        <MenuItem value={5}>24/7 365 Bout That Life</MenuItem>
+                    </Select>
+                </FormControl>
+                {calculationSubmitted && (
+                    <div>
+                        <p className={clsx(classes.noSpaceP)}>
+                            Calories: {calculatedMacros.calories}
+                        </p>
+                        <p className={clsx(classes.noSpaceP)}>
+                            Protein: {calculatedMacros.protein}
+                        </p>
+                        <p className={clsx(classes.noSpaceP)}>
+                            Carbs: {calculatedMacros.carbs}
+                        </p>
+                        <p className={clsx(classes.noSpaceP)}>
+                            Fat: {calculatedMacros.fat}
+                        </p>
+                    </div>
+                )}
+
+                <Button
+                    className={clsx(classes.marginTop)}
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        calculateMacros()
+                    }}
+                >
+                    Calculate
+                </Button>
+            </div>
+
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    marginTop: 50,
                 }}
             >
                 <h2>Add New Food</h2>

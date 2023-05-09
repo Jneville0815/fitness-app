@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     textField: {
         width: '25ch',
     },
+    sexField: {
+        width: '11.5ch',
+    },
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
