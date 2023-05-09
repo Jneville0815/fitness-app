@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 
 import Button from '@material-ui/core/Button'
@@ -7,7 +7,6 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 
 import useStyles from './styles'
-import { Context } from '../context/Store'
 import backend from '../api/backend'
 
 const Settings = () => {
@@ -30,15 +29,16 @@ const Settings = () => {
     const [fitnessSubmitted, setFitnessSubmitted] = useState(false)
     const [submittedLabel, setSubmittedLabel] = useState('')
     const [fitnessSubmittedLabel, setFitnessSubmittedLabel] = useState('')
-    const [state, dispatch] = useContext(Context)
 
     const retrieveMaxLifts = async () => {
         try {
             const response = await backend.get(
-                `/userInfo/${state.user_id}/fitness`,
+                `/userInfo/${localStorage.getItem('user_id')}/fitness`,
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )
@@ -51,11 +51,13 @@ const Settings = () => {
     const submitNewFitness = async () => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.user_id}/fitness`,
+                `/userInfo/${localStorage.getItem('user_id')}/fitness`,
                 maxLifts,
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )
@@ -79,11 +81,13 @@ const Settings = () => {
     const submitNewFood = async () => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.user_id}/addFood`,
+                `/userInfo/${localStorage.getItem('user_id')}/addFood`,
                 nutrients,
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )

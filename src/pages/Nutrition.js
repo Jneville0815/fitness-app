@@ -14,10 +14,8 @@ import TableRow from '@material-ui/core/TableRow'
 import DeleteIcon from '@material-ui/icons/Delete'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 
 import useStyles from './styles'
-import { Context } from '../context/Store'
 import backend from '../api/backend'
 
 const Nutrition = () => {
@@ -35,7 +33,6 @@ const Nutrition = () => {
         targetFat: 0,
         food: [],
     })
-    const [state, dispatch] = useContext(Context)
 
     const handleChange = (event) => {
         setFoodSelectionIndex(event.target.value)
@@ -44,11 +41,13 @@ const Nutrition = () => {
     const dailyReset = async () => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.user_id}/dailyReset`,
+                `/userInfo/${localStorage.getItem('user_id')}/dailyReset`,
                 {},
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )
@@ -64,7 +63,7 @@ const Nutrition = () => {
     const updateCurrentFood = async (food, protein, carbs, fat) => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.user_id}/addCurrentFood`,
+                `/userInfo/${localStorage.getItem('user_id')}/addCurrentFood`,
                 {
                     ...food,
                     currentProtein: protein,
@@ -73,7 +72,9 @@ const Nutrition = () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )
@@ -88,7 +89,9 @@ const Nutrition = () => {
     const removeCurrentFood = async (food, protein, carbs, fat) => {
         try {
             const response = await backend.post(
-                `/userInfo/${state.user_id}/removeCurrentFood`,
+                `/userInfo/${localStorage.getItem(
+                    'user_id'
+                )}/removeCurrentFood`,
                 {
                     ...food,
                     currentProtein: protein,
@@ -97,7 +100,9 @@ const Nutrition = () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )
@@ -111,11 +116,16 @@ const Nutrition = () => {
 
     const getUserInfo = async () => {
         try {
-            const response = await backend.get(`/userInfo/${state.user_id}`, {
-                headers: {
-                    Authorization: `Bearer ${state.apiToken}`,
-                },
-            })
+            const response = await backend.get(
+                `/userInfo/${localStorage.getItem('user_id')}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
+                    },
+                }
+            )
 
             const newData = {
                 name: response.data.name,

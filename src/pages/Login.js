@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 
 import FormControl from '@material-ui/core/FormControl'
@@ -13,7 +13,6 @@ import useStyles from './styles'
 import { useHistory } from 'react-router-dom'
 
 import backend from '../api/backend'
-import { Context } from '../context/Store'
 
 const Login = () => {
     const classes = useStyles()
@@ -25,7 +24,6 @@ const Login = () => {
         showPassword: false,
     })
     const [error, setError] = useState(false)
-    const [state, dispatch] = useContext(Context)
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value })
@@ -47,11 +45,9 @@ const Login = () => {
                 email,
                 password,
             })
-            // should these be called only if status is 200?
-            dispatch({ type: 'SET_TOKEN', payload: response.data.token })
-            dispatch({ type: 'SET_USER_ID', payload: response.data.user_id })
-            localStorage.setItem('token', response.data.token)
             if (response.status === 200) {
+                localStorage.setItem('token', response.data.token)
+                localStorage.setItem('user_id', response.data.user_id)
                 setValues({ ...values, email: '', password: '' })
                 console.log('Login Success')
                 setError(false)
@@ -62,6 +58,15 @@ const Login = () => {
             console.log('Login failed', err)
         }
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        const user_id = localStorage.getItem('user_id')
+
+        if (token && user_id) {
+            history.push('/nutrition')
+        }
+    }, [])
 
     return (
         <div className={clsx(classes.root)}>
@@ -112,7 +117,6 @@ const Login = () => {
                 className={clsx(classes.marginTop)}
                 variant="contained"
                 color="primary"
-                // href="/home"
                 onClick={() => {
                     authenticateUser()
                 }}

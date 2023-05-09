@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
@@ -7,14 +7,12 @@ import Tab from '@material-ui/core/Tab'
 import { Link, useHistory } from 'react-router-dom'
 
 import useStyles from './styles'
-import { Context } from '../context/Store'
 
 const Home = ({ children }) => {
     const classes = useStyles()
     const history = useHistory()
 
     const [value, setValue] = useState(0)
-    const [state, dispatch] = useContext(Context)
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -50,7 +48,8 @@ const Home = ({ children }) => {
                 <Link
                     to={'/'}
                     onClick={() => {
-                        dispatch({ type: 'SIGN_OUT', payload: '' })
+                        localStorage.removeItem('token')
+                        localStorage.removeItem('user_id')
                         history.push('/')
                     }}
                 >

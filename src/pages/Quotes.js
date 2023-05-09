@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
 import clsx from 'clsx'
 import useStyles from './styles'
 import Button from '@material-ui/core/Button'
 import backend from '../api/backend'
-import { Context } from '../context/Store'
 import { backend_url } from '../api/backend'
 
 const Quotes = () => {
@@ -13,8 +12,6 @@ const Quotes = () => {
 
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
     const [showFailureMessage, setShowFailureMessage] = useState(false)
-
-    const [state, dispatch] = useContext(Context)
 
     const classes = useStyles()
 
@@ -29,14 +26,16 @@ const Quotes = () => {
         if (source.length > 0 && quote.length > 0) {
             try {
                 const response = await backend.post(
-                    `/userInfo/${state.user_id}/addQuote`,
+                    `/userInfo/${localStorage.getItem('user_id')}/addQuote`,
                     {
                         source,
                         quote,
                     },
                     {
                         headers: {
-                            Authorization: `Bearer ${state.apiToken}`,
+                            Authorization: `Bearer ${localStorage.getItem(
+                                'token'
+                            )}`,
                         },
                     }
                 )
@@ -111,7 +110,9 @@ const Quotes = () => {
             <a
                 className={clsx(classes.marginTop)}
                 target="_blank"
-                href={`${backend_url}/userInfo/${state.user_id}/getAllQuotes`}
+                href={`${backend_url}/userInfo/${localStorage.getItem(
+                    'user_id'
+                )}/getAllQuotes`}
             >
                 Get All Quotes
             </a>

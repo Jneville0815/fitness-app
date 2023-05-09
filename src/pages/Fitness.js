@@ -8,12 +8,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
 
 import useStyles from './styles'
-import { Context } from '../context/Store'
 import backend from '../api/backend'
-import { push, pull, legs } from './fakeData'
 
 const Fitness = () => {
     const classes = useStyles()
@@ -22,7 +19,6 @@ const Fitness = () => {
         pullChecked: false,
         legsChecked: false,
     })
-    const [state, dispatch] = useContext(Context)
     const [value, setValue] = React.useState('bench')
     const [maxLifts, setMaxLifts] = useState({
         benchMax: 0,
@@ -34,10 +30,12 @@ const Fitness = () => {
     const retrieveMaxLifts = async () => {
         try {
             const response = await backend.get(
-                `/userInfo/${state.user_id}/fitness`,
+                `/userInfo/${localStorage.getItem('user_id')}/fitness`,
                 {
                     headers: {
-                        Authorization: `Bearer ${state.apiToken}`,
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'token'
+                        )}`,
                     },
                 }
             )
@@ -242,25 +240,6 @@ const Fitness = () => {
     return (
         <div className={clsx(classes.root)}>
             <h1>Fitness Page</h1>
-            {/* <WorkoutSection
-                name="push"
-                data={push}
-                checked={checked.pushChecked}
-                change={handleChange}
-            />
-            <WorkoutSection
-                name="pull"
-                data={pull}
-                checked={checked.pullChecked}
-                change={handleChange}
-            />
-            <WorkoutSection
-                name="legs"
-                data={legs}
-                checked={checked.legsChecked}
-                change={handleChange}
-            /> */}
-
             <FormControl component="fieldset">
                 <RadioGroup
                     aria-label="lift"
