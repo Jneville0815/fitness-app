@@ -5,8 +5,9 @@ import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core//MenuItem'
-import Select from '@material-ui/core//Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
+import Switch from '@material-ui/core/Switch'
 
 import useStyles from './styles'
 import backend from '../api/backend'
@@ -47,6 +48,10 @@ const Settings = () => {
     const [fitnessSubmitted, setFitnessSubmitted] = useState(false)
     const [submittedLabel, setSubmittedLabel] = useState('')
     const [fitnessSubmittedLabel, setFitnessSubmittedLabel] = useState('')
+
+    const [showProfile, setShowProfile] = useState(false)
+    const [showAddFood, setShowAddFood] = useState(false)
+    const [showUpdateLifts, setShowUpdateLifts] = useState(false)
 
     const retrieveMaxLifts = async () => {
         try {
@@ -236,132 +241,171 @@ const Settings = () => {
                     flexDirection: 'column',
                 }}
             >
-                <h2>Profile</h2>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
                 >
-                    <InputLabel>Age</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={profile.age}
-                        onChange={handleProfileChange('age')}
+                    <h2>Profile</h2>
+                    <Switch
+                        color="primary"
+                        checked={!!showProfile}
+                        onChange={() => setShowProfile(!showProfile)}
                     />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Sex</InputLabel>
-                    <Select
-                        value={profile.sex}
-                        onChange={handleProfileChange('sex')}
-                    >
-                        <MenuItem value={0}>Male</MenuItem>
-                        <MenuItem value={1}>Female</MenuItem>
-                    </Select>
-                </FormControl>
-                <div>
-                    <FormControl
-                        className={clsx(classes.margin, classes.sexField)}
-                    >
-                        <InputLabel>Height (ft)</InputLabel>
-                        <Select
-                            value={profile.heightFeet}
-                            onChange={handleProfileChange('heightFeet')}
-                        >
-                            <MenuItem value={4}>4</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={6}>6</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl
-                        className={clsx(classes.margin, classes.sexField)}
-                    >
-                        <InputLabel>Height (in)</InputLabel>
-                        <Select
-                            value={profile.heightInches}
-                            onChange={handleProfileChange('heightInches')}
-                        >
-                            <MenuItem value={0}>0</MenuItem>
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={4}>4</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={6}>6</MenuItem>
-                            <MenuItem value={7}>7</MenuItem>
-                            <MenuItem value={8}>8</MenuItem>
-                            <MenuItem value={9}>9</MenuItem>
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={11}>11</MenuItem>
-                        </Select>
-                    </FormControl>
                 </div>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Weight (lbs)</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={profile.weight}
-                        onChange={handleProfileChange('weight')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Goal</InputLabel>
-                    <Select
-                        value={profile.goal}
-                        onChange={handleProfileChange('goal')}
+                {showProfile && (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            marginBottom: 50,
+                        }}
                     >
-                        <MenuItem value={0}>Fat Loss</MenuItem>
-                        <MenuItem value={1}>Maintenance</MenuItem>
-                        <MenuItem value={2}>Gain Muscle</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Activity Level</InputLabel>
-                    <Select
-                        value={profile.activityLevel}
-                        onChange={handleProfileChange('activityLevel')}
-                    >
-                        <MenuItem value={0}>None</MenuItem>
-                        <MenuItem value={1}>1-3 times per week</MenuItem>
-                        <MenuItem value={2}>4-5 times per week</MenuItem>
-                        <MenuItem value={3}>Daily Moderate</MenuItem>
-                        <MenuItem value={4}>Daily Intense</MenuItem>
-                        <MenuItem value={5}>24/7 365 Bout That Life</MenuItem>
-                    </Select>
-                </FormControl>
-                {calculationSubmitted && (
-                    <div>
-                        <p className={clsx(classes.noSpaceP)}>
-                            Calories: {calculatedMacros.calories}
-                        </p>
-                        <p className={clsx(classes.noSpaceP)}>
-                            Protein: {calculatedMacros.protein}
-                        </p>
-                        <p className={clsx(classes.noSpaceP)}>
-                            Carbs: {calculatedMacros.carbs}
-                        </p>
-                        <p className={clsx(classes.noSpaceP)}>
-                            Fat: {calculatedMacros.fat}
-                        </p>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Age</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={profile.age}
+                                onChange={handleProfileChange('age')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Sex</InputLabel>
+                            <Select
+                                value={profile.sex}
+                                onChange={handleProfileChange('sex')}
+                            >
+                                <MenuItem value={0}>Male</MenuItem>
+                                <MenuItem value={1}>Female</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <div>
+                            <FormControl
+                                className={clsx(
+                                    classes.margin,
+                                    classes.sexField
+                                )}
+                            >
+                                <InputLabel>Height (ft)</InputLabel>
+                                <Select
+                                    value={profile.heightFeet}
+                                    onChange={handleProfileChange('heightFeet')}
+                                >
+                                    <MenuItem value={4}>4</MenuItem>
+                                    <MenuItem value={5}>5</MenuItem>
+                                    <MenuItem value={6}>6</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl
+                                className={clsx(
+                                    classes.margin,
+                                    classes.sexField
+                                )}
+                            >
+                                <InputLabel>Height (in)</InputLabel>
+                                <Select
+                                    value={profile.heightInches}
+                                    onChange={handleProfileChange(
+                                        'heightInches'
+                                    )}
+                                >
+                                    <MenuItem value={0}>0</MenuItem>
+                                    <MenuItem value={1}>1</MenuItem>
+                                    <MenuItem value={2}>2</MenuItem>
+                                    <MenuItem value={3}>3</MenuItem>
+                                    <MenuItem value={4}>4</MenuItem>
+                                    <MenuItem value={5}>5</MenuItem>
+                                    <MenuItem value={6}>6</MenuItem>
+                                    <MenuItem value={7}>7</MenuItem>
+                                    <MenuItem value={8}>8</MenuItem>
+                                    <MenuItem value={9}>9</MenuItem>
+                                    <MenuItem value={10}>10</MenuItem>
+                                    <MenuItem value={11}>11</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Weight (lbs)</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={profile.weight}
+                                onChange={handleProfileChange('weight')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Goal</InputLabel>
+                            <Select
+                                value={profile.goal}
+                                onChange={handleProfileChange('goal')}
+                            >
+                                <MenuItem value={0}>Fat Loss</MenuItem>
+                                <MenuItem value={1}>Maintenance</MenuItem>
+                                <MenuItem value={2}>Gain Muscle</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Activity Level</InputLabel>
+                            <Select
+                                value={profile.activityLevel}
+                                onChange={handleProfileChange('activityLevel')}
+                            >
+                                <MenuItem value={0}>None</MenuItem>
+                                <MenuItem value={1}>
+                                    1-3 times per week
+                                </MenuItem>
+                                <MenuItem value={2}>
+                                    4-5 times per week
+                                </MenuItem>
+                                <MenuItem value={3}>Daily Moderate</MenuItem>
+                                <MenuItem value={4}>Daily Intense</MenuItem>
+                                <MenuItem value={5}>
+                                    24/7 365 Bout That Life
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
+                        {calculationSubmitted && (
+                            <div>
+                                <p className={clsx(classes.noSpaceP)}>
+                                    Calories: {calculatedMacros.calories}
+                                </p>
+                                <p className={clsx(classes.noSpaceP)}>
+                                    Protein: {calculatedMacros.protein}
+                                </p>
+                                <p className={clsx(classes.noSpaceP)}>
+                                    Carbs: {calculatedMacros.carbs}
+                                </p>
+                                <p className={clsx(classes.noSpaceP)}>
+                                    Fat: {calculatedMacros.fat}
+                                </p>
+                            </div>
+                        )}
+
+                        <Button
+                            className={clsx(classes.marginTop)}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                calculateMacros()
+                            }}
+                        >
+                            Calculate
+                        </Button>
                     </div>
                 )}
-
-                <Button
-                    className={clsx(classes.marginTop)}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        calculateMacros()
-                    }}
-                >
-                    Calculate
-                </Button>
             </div>
 
             <div
@@ -370,91 +414,115 @@ const Settings = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'column',
-                    marginTop: 50,
                 }}
             >
-                <h2>Add New Food</h2>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Name</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={nutrients.name}
-                        onChange={handleChange('name')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Protein</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={nutrients.protein}
-                        onChange={handleChange('protein')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Carbs</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={nutrients.carbs}
-                        onChange={handleChange('carbs')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Fat</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={nutrients.fat}
-                        onChange={handleChange('fat')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Information</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={nutrients.information}
-                        onChange={handleChange('information')}
-                    />
-                </FormControl>
-                {submitted && (
-                    <p
-                        style={{
-                            color:
-                                submittedLabel === 'Invalid Entry'
-                                    ? 'red'
-                                    : 'green',
-                            marginBottom: 0,
-                        }}
-                    >
-                        {submittedLabel}
-                    </p>
-                )}
-                <Button
-                    className={clsx(classes.marginTop)}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        if (nutrients.name.length > 0) {
-                            submitNewFood()
-                        } else {
-                            setSubmittedLabel('Invalid Entry')
-                            setSubmitted(true)
-                            setTimeout(() => {
-                                setSubmitted(false)
-                            }, 2000)
-                        }
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     }}
                 >
-                    Add
-                </Button>
+                    <h2>Add New Food</h2>
+                    <Switch
+                        color="primary"
+                        checked={!!showAddFood}
+                        onChange={() => setShowAddFood(!showAddFood)}
+                    />
+                </div>
+                {showAddFood && (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            marginBottom: 50,
+                        }}
+                    >
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Name</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={nutrients.name}
+                                onChange={handleChange('name')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Protein</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={nutrients.protein}
+                                onChange={handleChange('protein')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Carbs</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={nutrients.carbs}
+                                onChange={handleChange('carbs')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Fat</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={nutrients.fat}
+                                onChange={handleChange('fat')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Information</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={nutrients.information}
+                                onChange={handleChange('information')}
+                            />
+                        </FormControl>
+                        {submitted && (
+                            <p
+                                style={{
+                                    color:
+                                        submittedLabel === 'Invalid Entry'
+                                            ? 'red'
+                                            : 'green',
+                                    marginBottom: 0,
+                                }}
+                            >
+                                {submittedLabel}
+                            </p>
+                        )}
+                        <Button
+                            className={clsx(classes.marginTop)}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                if (nutrients.name.length > 0) {
+                                    submitNewFood()
+                                } else {
+                                    setSubmittedLabel('Invalid Entry')
+                                    setSubmitted(true)
+                                    setTimeout(() => {
+                                        setSubmitted(false)
+                                    }, 2000)
+                                }
+                            }}
+                        >
+                            Add
+                        </Button>
+                    </div>
+                )}
             </div>
             <div
                 style={{
@@ -462,73 +530,97 @@ const Settings = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'column',
-                    marginTop: 50,
                 }}
             >
-                <h2>Update Max Lifts</h2>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Bench</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={maxLifts.benchMax}
-                        onChange={handleFitnessChange('benchMax')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Deadlift</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={maxLifts.deadliftMax}
-                        onChange={handleFitnessChange('deadliftMax')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Squat</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={maxLifts.squatMax}
-                        onChange={handleFitnessChange('squatMax')}
-                    />
-                </FormControl>
-                <FormControl
-                    className={clsx(classes.margin, classes.textField)}
-                >
-                    <InputLabel>Press</InputLabel>
-                    <Input
-                        type={'text'}
-                        value={maxLifts.pressMax}
-                        onChange={handleFitnessChange('pressMax')}
-                    />
-                </FormControl>
-                {fitnessSubmitted && (
-                    <p
-                        style={{
-                            color:
-                                fitnessSubmittedLabel === 'Failed to Update'
-                                    ? 'red'
-                                    : 'green',
-                            marginBottom: 0,
-                        }}
-                    >
-                        {fitnessSubmittedLabel}
-                    </p>
-                )}
-                <Button
-                    className={clsx(classes.marginTop)}
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        submitNewFitness()
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     }}
                 >
-                    Update
-                </Button>
+                    <h2>Update Max Lifts</h2>
+                    <Switch
+                        color="primary"
+                        checked={!!showUpdateLifts}
+                        onChange={() => setShowUpdateLifts(!showUpdateLifts)}
+                    />
+                </div>
+                {showUpdateLifts && (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Bench</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={maxLifts.benchMax}
+                                onChange={handleFitnessChange('benchMax')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Deadlift</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={maxLifts.deadliftMax}
+                                onChange={handleFitnessChange('deadliftMax')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Squat</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={maxLifts.squatMax}
+                                onChange={handleFitnessChange('squatMax')}
+                            />
+                        </FormControl>
+                        <FormControl
+                            className={clsx(classes.margin, classes.textField)}
+                        >
+                            <InputLabel>Press</InputLabel>
+                            <Input
+                                type={'text'}
+                                value={maxLifts.pressMax}
+                                onChange={handleFitnessChange('pressMax')}
+                            />
+                        </FormControl>
+                        {fitnessSubmitted && (
+                            <p
+                                style={{
+                                    color:
+                                        fitnessSubmittedLabel ===
+                                        'Failed to Update'
+                                            ? 'red'
+                                            : 'green',
+                                    marginBottom: 0,
+                                }}
+                            >
+                                {fitnessSubmittedLabel}
+                            </p>
+                        )}
+                        <Button
+                            className={clsx(classes.marginTop)}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                submitNewFitness()
+                            }}
+                        >
+                            Update
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     )
