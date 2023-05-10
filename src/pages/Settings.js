@@ -248,7 +248,7 @@ const Settings = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <h2>Profile</h2>
+                    <h2>Calculate Macros</h2>
                     <Switch
                         color="primary"
                         checked={!!showProfile}
