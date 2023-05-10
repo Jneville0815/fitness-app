@@ -1,5 +1,5 @@
 import { Route, Redirect } from 'react-router-dom'
-import Home from '../pages/Home'
+import Layout from '../pages/Layout'
 
 function ProtectedRoute({ children, ...rest }) {
     const token = localStorage.getItem('token')
@@ -8,7 +8,7 @@ function ProtectedRoute({ children, ...rest }) {
         <Route
             {...rest}
             render={() => {
-                return token ? <Home>{children}</Home> : <Redirect to="/" />
+                return token ? <Layout>{children}</Layout> : <Redirect to="/" />
             }}
         />
     )

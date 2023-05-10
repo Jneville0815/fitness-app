@@ -8,7 +8,7 @@ import { Link, useHistory } from 'react-router-dom'
 
 import useStyles from './styles'
 
-const Home = ({ children }) => {
+const Layout = ({ children }) => {
     const classes = useStyles()
     const history = useHistory()
 
@@ -60,4 +60,4 @@ const Home = ({ children }) => {
     )
 }
 
-export default Home
+export default Layout
