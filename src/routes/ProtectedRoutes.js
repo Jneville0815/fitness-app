@@ -3,7 +3,6 @@ import Layout from '../pages/Layout'
 
 function ProtectedRoute({ children, ...rest }) {
     const token = localStorage.getItem('token')
-    console.log('token', token)
     return (
         <Route
             {...rest}
